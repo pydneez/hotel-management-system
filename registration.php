@@ -1,9 +1,6 @@
 <?php
-    ini_set('display_errors', 1); // <--- ADD THIS
-    error_reporting(E_ALL);     // <--- ADD THIS
     require_once('connect.php'); 
     
-
     // --- Helper Functions ---
 
     /**
@@ -21,7 +18,7 @@
         $query = "SELECT COUNT(*) FROM guests WHERE email = ?";
         $stmt = $conn->prepare($query);
         if (!$stmt) {
-             return false; // Handle prepare error
+            return false; // Handle prepare error
         }
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -29,12 +26,8 @@
         $stmt->fetch();
         $stmt->close();
         return $count > 0;
-    }   
+    }
 
-    /**
-     * Checks if the password meets the required pattern.
-     * (Min 6 chars, at least one letter, at least one number)
-     */
     function checkPasswordPattern($password){
         return preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/", trim($password)) === 1;
     }
@@ -52,7 +45,6 @@
         if (!$stmt) {
             return "Database error: Could not prepare statement.";
         }
-        // bind string data type 's' to ?
         $stmt->bind_param("sssss", $fname, $lname, $email, $hashedPassword, $phone);
 
         if ($stmt->execute()) {
@@ -60,19 +52,20 @@
             return true; 
         } else {
             // Handle potential duplicate entry error
-            if ($stmt->errno == 1062) { // 1062 is the MySQL error code for duplicate entry
+            // 1062 is the MySQL error code for duplicate entry
+            if ($stmt->errno == 1062) {
                 $error_msg = "An account with this email already exists.";
             } else {
                 $error_msg = "Error: " . $stmt->error;
             }
             $stmt->close();
-            return $error_msg; // Return the specific error message
+            return $error_msg;
         }
     }
 
+
     // --- Form Processing ---
 
-    // Initialize message variables to be used in the HTML
     $error_message = "";
     $success_message = "";
 
@@ -83,10 +76,8 @@
         $lname = trim(filter_input(INPUT_POST, 'lname', FILTER_SANITIZE_SPECIAL_CHARS));   
         $email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
         
-        // ADD THIS: Sanitize phone number as a string
         $phone = trim(filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS));
 
-        // Raw passwords (don't sanitize, as special chars are allowed)
         $password = $_POST['password'];
         $cpassword = $_POST['cpassword'];
 
@@ -97,41 +88,37 @@
         if (empty($fname) || empty($lname) || empty($email) || empty($phone) || empty($password) || empty($cpassword)) {
             $error_message = "All fields marked with * are required.";
         }
-        // Check for valid email format
         elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error_message = "Invalid email format. Please enter a valid email address.";
         }
-        
-        // ADD THIS: Optional validation for phone number
-        // If the phone field is NOT empty, then validate it
-        elseif (!preg_match('/^[\+]?[\d -]{7,20}$/', $phone)) {
-            $error_message = "Invalid phone number format. (Allowed: +, digits, spaces, -)";
+        elseif (!preg_match('/^\+\d{7,15}$/', $phone)) {
+            $error_message = "Invalid phone number. Please select your country and enter a valid number.";
         }
         
-        // Check password complexity
         elseif (!checkPasswordPattern($password)) {
             $error_message = "Password must be at least 6 characters long and contain at least one letter and one number.";
         }
-        // ... (rest of your validations)
+        elseif (!checkMatchingPassword($password, $cpassword)) {
+             $error_message = "Passwords do not match.";
+        }
+        elseif (checkExistingGuest($conn, $email)) {
+             $error_message = "An account with this email already exists.";
+        }
         
         // 3. Process Data (All checks passed)
         else {
-            // Add $phone to the function call
             $result = addGuest($conn, $fname, $lname, $email, $phone, $password);
             
             if ($result === true) {
                 $success_message = "Registration successful! You can now log in.";
-                // redirect to the login page:
                 header("Location: login.php?status=success");
                 exit;
             } else {
-                // $result contains the error message from the addGuest function
                 $error_message = $result; 
             }
         }
     }
-    // Close the connection (if not handled by connect.php)
-    $conn->close(); 
+    $conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -142,10 +129,11 @@
     <title>Guest Registration | Hotel Management System</title>
     <link rel="stylesheet" href="style.css">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
-
     <div id="">
         <div id="div_main">
             <div id="div_content" class="form">
@@ -171,12 +159,13 @@
                     <input type="email" name="email" required value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>"> <br>
 
                     <label for="phone">Phone Number <span style="color: red;">*</span></label>
-                    <input type="tel" name="phone" value="<?php echo isset($phone) ? htmlspecialchars($phone) : ''; ?>" required> <br>
+                    <input type="tel"  name="phone" id="phone" value="<?php echo isset($phone) ? htmlspecialchars($phone) : ''; ?>" required> <br>
 
                     <label for="password">Password <span style="color: red;">*</span></label>
                     <input type="password"  name="password" required 
+                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
                         title="Password must be 6+ chars, with at least one letter and one number"> <br>
-
+                    
                     <label for="cpassword">Confirm Password <span style="color: red;">*</span></label>
                     <input type="password"  name="cpassword" required> <br>
                     
@@ -194,6 +183,43 @@
     
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     
+    <script>
+      const phoneInput = document.querySelector("#phone");
+    
+      //Initialize the library
+      const iti = window.intlTelInput(phoneInput, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        
+        // Automatically selects the user's country based on their IP
+        initialCountry: "auto", 
+        geoIpLookup: function(callback) {
+          fetch("https://ipapi.co/json")
+            .then(res => res.json())
+            .then(data => callback(data.country_code))
+            .catch(() => callback("us"));
+        },
+        // It creates a hidden input with name="phone"
+        // and fills it with the full international number.
+        hiddenInput: "phone",
+        
+        // Puts the country code in the input
+        separateDialCode: true,
+      });
+
+      // when page reloads.
+      // We want to re-format the "sticky" number (e.g., +15551234567)
+      // that PHP put back into the 'value' attribute.
+      if (phoneInput.value.trim()) {
+        iti.setNumber(phoneInput.value);
+      }
+    </script>
+    
+    <?php
+        if (isset($conn)) {
+            $conn->close();
+        }
+    ?>
 </body>
 </html>
