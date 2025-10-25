@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Check in</title>
+    <title>Room Management</title>
     <link rel="stylesheet" href="../admin.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     ?>
 
     <main class="content">
-        <h1>Check in</h1>
+        <h1>Room Type management</h1>
         
     </main>
 </div>

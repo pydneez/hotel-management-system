@@ -1,5 +1,7 @@
 <?php
-    require_once('../connect.php');
+    // __DIR__ is the absolute path to the current folder (e.g., /htdocs/admin)
+    // This path will now work from anywhere!
+    require_once(__DIR__ . '/../connect.php');
     session_start();
 
     // Authentication Check

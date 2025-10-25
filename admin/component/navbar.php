@@ -4,7 +4,7 @@
 
 <header class="navbar">
     <div class="nav-left">
-        <img src="img/hotel_logo.png" alt="Hotel Logo" class="logo">
+        <img src="/img/hotel_logo.png" alt="Hotel Logo" class="logo">
         <h2>RoyalStay Hotel</h2>
     </div>
 
