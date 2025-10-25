@@ -21,3 +21,9 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: 
 .room-info { padding: 15px; }
 .room-info h3 { margin-top: 0; color: #333; }
 .room-info p { color: #666; font-size: 14px; }
+
+
+
+h1 {
+    color: black;
+}

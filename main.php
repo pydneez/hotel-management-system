@@ -1,6 +1,6 @@
 <?php
-    // Optional: Include your database connection if you plan to dynamically load data here
-    // require_once('connect.php'); 
+    
+    require_once('connect.php'); 
 ?>
 
 <!DOCTYPE html>
@@ -8,8 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to [Hotel Name] | Book Your Stay</title>
-    <link rel="stylesheet" href="default.css">
+    <title>Welcome to [Hotel Name] | Book Your Stay </title>
+    <link rel="stylesheet" href="main.css">
     <style>
         </style>
 </head>
