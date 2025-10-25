@@ -1,109 +1,169 @@
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f5f7fa;
+/* === Theme Variables === */
+:root {
+  --navy-blue: #0a2342;
+  --dark-blue: #051930;
+  --light-blue: #2ca5b5;
+  --text-light: #f0f4f8;
+  --text-dark: #333;
+  --border-color: #ddd;
+  --content-bg: #f5f7fa;  /* Light grey background for content */
+  --accent-gold: #ffd700; /* Gold for hover, as you had */
+  --white: #ffffff;
 }
 
-/* Navbar */
+/* === Global Admin Styles === */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  background-color: var(--content-bg);
+  color: var(--text-dark);
+}
+
+/* === Navbar === */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #003366;
-    color: white;
-    padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--dark-blue); /* Use darkest blue for top bar */
+  color: var(--text-light);
+  padding: 10px 30px;
+  height: 60px;
+  box-sizing: border-box; /* Include padding in height */
 }
 
 .navbar .nav-left {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .navbar .logo {
-    height: 40px;
-    margin-right: 10px;
+  height: 40px;
+}
+
+.navbar .nav-left h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--white);
+}
+
+.navbar .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar .nav-right span {
+  font-weight: 500;
+  color: var(--text-light);
 }
 
 .logout-btn {
-    background-color: #ff4d4d;
-    border: none;
-    padding: 8px 16px;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
+  background-color: var(--light-blue); /* Use accent color */
+  border: none;
+  padding: 8px 16px;
+  color: var(--white);
+  border-radius: 8px; /* Match login form style */
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none; /* Make it look like a button */
+  transition: background-color 0.3s;
 }
 .logout-btn:hover {
-    background-color: #e63939;
+  background-color: #228491; /* A slightly darker accent blue */
 }
 
-/* Dashboard Layout */
+/* === Dashboard Layout === */
 .dashboard-container {
-    display: flex;
-    height: calc(100vh - 60px);
+  display: flex;
+  /* Full viewport height minus the 60px navbar */
+  height: calc(100vh - 60px);
 }
 
-/* Sidebar */
+/* === Sidebar === */
 .sidebar {
-    width: 240px;
-    background-color: #00264d;
-    color: white;
-    padding: 20px;
+  width: 240px;
+  background-color: var(--navy-blue); /* Use main navy blue */
+  color: var(--text-light);
+  padding: 1.5rem;
+  box-sizing: border-box;
+  flex-shrink: 0; /* Prevents sidebar from shrinking */
 }
 
 .sidebar h3 {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(240, 244, 248, 0.3);
+  padding-bottom: 1rem;
 }
 
 .sidebar ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .sidebar li {
-    margin: 15px 0;
+  margin-bottom: 1rem;
 }
 
 .sidebar a {
-    color: white;
-    text-decoration: none;
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.05rem;
+  display: block;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .sidebar a:hover {
-    color: #ffd700;
+  background-color: var(--dark-blue);
+  color: var(--accent-gold); /* Use gold on hover */
 }
 
-/* Main Content */
+/* === THIS IS THE UPDATED RULE === */
+.sidebar a.active {
+  /* Style for the current page (white box) */
+  background-color: var(--white);
+  color: var(--navy-blue); /* Dark text on white bg */
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* === Main Content === */
 .content {
-    flex: 1;
-    padding: 20px 40px;
+  flex: 1; /* Takes up all remaining space */
+  padding: 2rem;
+  overflow-y: auto; /* Allows content to scroll */
 }
 
-.profile-card {
-    background: white;
-    color: black;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-
+/* === Dashboard Cards === */
 .dashboard-widgets {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+  display: grid;
+  /* Responsive grid: 1 column on small screens, auto-fill on larger */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
 }
 
 .card {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background: var(--white);
+  border-radius: 12px; /* Match login form style */
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer shadow */
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-dark);
 }
 .card span {
-    display: block;
-    font-size: 28px;
-    font-weight: bold;
-    color: #003366;
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--navy-blue); /* Use main brand color */
+  margin-top: 10px;
 }
+

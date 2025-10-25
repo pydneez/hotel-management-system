@@ -1,20 +1,42 @@
 <?php
-require_once('../connect.php');
-session_start();
+    require_once('../connect.php');
+    session_start();
 
-if (!isset($_SESSION['email'])) {
-    header("Location: ../login.php");
-    exit();
-}
+    // Authentication Check
+    // Are they logged in at all?
+    if (!isset($_SESSION['email'])) {
+        // send to login
+        header("Location: ../login.php?error=nosession");
+        exit();
+    }
 
-$email = $_SESSION['email'];
+    //  Authorization Check
+    // Are they an employee or guest? 
+    if (!isset($_SESSION['role']) || $_SESSION['role'] === 'guest') {
+        // logged in and is a guests!
+        // send to guest dashboard
+        header("Location: ../dashboard.php"); 
+        exit();
+    }
 
-// Fetch employee details
-$stmt = $conn->prepare("SELECT email, role FROM Employees WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-$employee = $result->fetch_assoc();
+    // authenticated and authorized staff confirmed
+    $email = $_SESSION['email'];
 
-$stmt->close();
+    // Fetch employee details
+    $stmt = $conn->prepare("SELECT fname, email, role FROM Employees WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $employee = $result->fetch_assoc();
+    $stmt->close();
+
+
+    // What if their account was deleted while they were logged in?
+    if (!$employee) {
+        // Force a logout
+        session_unset();
+        session_destroy();
+        header("Location: ../login.php?error=deleted");
+        exit();
+    }
 ?>

@@ -50,6 +50,10 @@
         $success_message = "Registration successful! You can now log in.";
     }
 
+    if (isset($_GET['error']) && $_GET['error'] === 'deleted') {
+        $error_message = "Your account has been deleted";
+    }
+
     if (isset($_POST['submit'])) {
         $success_message = ""; 
         
