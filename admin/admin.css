@@ -7,7 +7,7 @@
   --text-dark: #333;
   --border-color: #ddd;
   --content-bg: #f5f7fa;  /* Light grey background for content */
-  --accent-gold: #ffd700; /* Gold for hover, as you had */
+  --accent-gold: #ffd700; /* Gold for hover */
   --white: #ffffff;
 }
 
@@ -118,7 +118,7 @@ body {
   display: block;
   padding: 10px 15px;
   border-radius: 8px;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .sidebar a:hover {
@@ -126,9 +126,8 @@ body {
   color: var(--accent-gold); /* Use gold on hover */
 }
 
-/* === THIS IS THE UPDATED RULE === */
-.sidebar a.active {
-  /* Style for the current page (white box) */
+/* This is the "white box" active style */
+.sidebar ul li a.active {
   background-color: var(--white);
   color: var(--navy-blue); /* Dark text on white bg */
   font-weight: 600;
@@ -165,5 +164,139 @@ body {
   font-weight: 700;
   color: var(--navy-blue); /* Use main brand color */
   margin-top: 10px;
+}
+
+/* ===============================================
+=== ROOM MANAGEMENT STYLES (NOW COMBINED) === 
+===============================================
+*/
+
+/* === NEW: Header Row Container === */
+.content-header-row {
+  display: flex;
+  flex-wrap: wrap; /* Allows stacking on small screens */
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem; /* Space below the row */
+  gap: 1rem; /* Space between items if they wrap */
+}
+
+
+/* === Page Toggle === */
+.page-toggle {
+  display: flex;
+  background-color: var(--navy-blue);
+  border-radius: 10px;
+  padding: 5px;
+  /* UPDATED: This forces the toggle to be wider,
+    like in your first image.
+  */
+  min-width: 300px; 
+  max-width: 100%; /* Ensures responsiveness */
+}
+
+.toggle-button {
+  flex: 1;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-light);
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.toggle-button:hover {
+  background-color: var(--dark-blue);
+}
+
+.toggle-button.active {
+  background-color: var(--white);
+  color: var(--navy-blue);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* === Header Actions === */
+.header-actions {
+  /* text-align: right; <-- This is no longer needed */
+  /* We just let the flex container handle spacing */
+}
+
+.btn-primary {
+  background-color: var(--light-blue);
+  color: var(--white);
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+.btn-primary:hover {
+  background-color: #228491; /* Darker accent blue */
+}
+
+
+/* === Data Table Styling === */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden; /* Ensures border-radius clips table */
+}
+
+.data-table th,
+.data-table td {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.data-table th {
+  background-color: #f5f7fa; /* Light grey header */
+  font-weight: 600;
+  color: var(--navy-blue);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover {
+  background-color: #fbfcfe;
+}
+
+.table-room-image {
+  width: 100px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.action-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.action-icons img {
+  transition: transform 0.2s;
+}
+
+.action-icons img:hover {
+  transform: scale(1.2);
+}
+
+.table-footer {
+  text-align: right !important;
+  font-weight: 500;
+  color: #555;
+  background-color: #f5f7fa;
 }
 

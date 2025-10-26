@@ -26,8 +26,8 @@
             </a>
         </li>
         <li>
-            <a href="/admin/room/rooms.php" class="<?php echo ($current_page == 'rooms.php') ? 'active' : ''; ?>">
-                🧹 Room Management
+            <a href="/admin/room/rooms.php" class="<?php echo ($current_page == 'rooms.php' || $current_page == 'room_types.php'  ) ? 'active' : ''; ?>">
+                🧹 Room
             </a>
         </li>
         <li>
