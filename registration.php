@@ -118,7 +118,6 @@
             }
         }
     }
-    $conn->close();
 ?>
 
 <!DOCTYPE html>
