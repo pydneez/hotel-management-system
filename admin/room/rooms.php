@@ -59,7 +59,7 @@
                         <td><?php echo htmlspecialchars($row['status']); ?></td>
                         <td>
                             <div class="action-icons">
-                                <a href='edit_roomtype.php?id=<?php echo $row['room_no']; ?>'>
+                                <a href='edit_room.php?id=<?php echo $row['room_no']; ?>'>
                                     <img src="/img/Modify.png" alt="Edit" width="24" height="24" title="Edit">
                                 </a>
                                 <a href='delinfo.php?id=<?php echo $row['room_no']; ?>'>

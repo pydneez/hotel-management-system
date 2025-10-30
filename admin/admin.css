@@ -295,3 +295,238 @@ body {
   background-color: #f5f7fa;
 }
 
+/* ===============================================
+=== FORM & INPUT STYLES (ADD THIS TO ADMIN.CSS) ===
+===============================================
+*/
+/* This ensures all forms in the admin panel are consistent */
+
+label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+/* This styles all text inputs, textareas, and select dropdowns */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-sizing: border-box; /* Crucial for width: 100% */
+  font-size: 1rem;
+  color: var(--text-dark);
+  background-color: var(--white);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+/* Consistent focus style for all inputs */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--navy-blue);
+  box-shadow: 0 0 0 3px rgba(10, 35, 66, 0.2);
+}
+
+/* === Form-Specific Buttons === */
+/* Base class for all buttons (<a> or <input> or <button>) */
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s, transform 0.1s;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary (Submit) Button - This just ensures .btn-primary works on all tags */
+.btn-primary {
+  background-color: var(--light-blue);
+  color: var(--white);
+}
+.btn-primary:hover {
+  background-color: #228491;
+}
+
+/* Secondary (Back/Cancel) Button */
+.btn-secondary {
+  background-color: #f5f7fa; /* content-bg */
+  color: var(--text-dark);
+  border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+  background-color: #e9ecef;
+}
+
+/* === Form Messages (Error/Success) === */
+/* These will match your login/registration page messages */
+.form-message {
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border: 1px solid transparent;
+}
+
+.form-message.error {
+  background-color: rgba(217, 48, 37, 0.1);
+  color: #d93025; /* Error Red */
+  border-color: #d93025;
+}
+
+.form-message.success {
+  background-color: rgba(30, 142, 62, 0.1);
+  color: #1e8e3e; /* Success Green */
+  border-color: #1e8e3e;
+}
+
+
+.background-card {
+  background: var(--white);
+  border-radius: 12px; /* Match login form style */
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer shadow */
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+
+label span {
+  color: red; /* Error Red */
+  font-weight: normal; /* Stops it from inheriting label's bold */
+  font-size: 1em; /* Matches the label's font size */
+  margin-left: 2px;
+}
+
+/* ===============================================
+   === IMAGE UPLOAD & PREVIEW STYLES (NEW) ===
+   ===============================================
+*/
+
+.image-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.image-preview-item {
+  position: relative;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.image-preview-img {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.delete-image-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 28px;
+  height: 28px;
+  background-color: rgba(217, 48, 37, 0.85); /* Red */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: Arial, sans-serif;
+}
+
+.delete-image-btn:hover {
+  background-color: #d93025; /* Stronger Red */
+  transform: scale(1.1);
+}
+
+/* Style the file input to look consistent */
+input[type="file"] {
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background-color: #f5f7fa;
+}
+
+/* For multiple files, this helps */
+input[type="file"]::-webkit-file-upload-button {
+  background-color: var(--light-blue);
+  color: var(--white);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+   background-color: #228491;
+}
+
+
+
+/* This creates the 2-column grid for forms */
+.form-layout-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* 2/3 width for info, 1/3 for images */
+  gap: 1.5rem;
+  align-items: flex-start; /* Aligns the tops of the cards */
+}
+
+/* This is the submit button row, placed *outside* the grid */
+.form-submit-row {
+  text-align: right;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* On smaller screens, stack the columns */
+@media (max-width: 992px) {
+  .form-layout-grid {
+    grid-template-columns: 1fr; /* Single column */
+  }
+}
