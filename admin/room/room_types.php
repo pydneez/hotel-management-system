@@ -1,5 +1,17 @@
 <?php
     require_once(__DIR__ . '/../auth_check.php');
+
+    $success_message = "";
+    $error_message = ""; 
+
+    // Now, populate them if the URL parameter exists
+    if (isset($_GET['status']) && $_GET['status'] === 'success1') {
+        $success_message = "New room type has been added successfully";
+    } 
+    // Small tip: use 'else if' here for slightly better performance
+    else if (isset($_GET['status']) && $_GET['status'] === 'success2') {
+        $success_message = "Room type has been edited successfully";
+    }
 ?>
 
 <!DOCTYPE html>
@@ -23,19 +35,20 @@
 
         <main class="content">
             <h1>Manage Room Type</h1>
+            
             <div class="content-header-row">
                 <div class="page-toggle">
                     <a href = "rooms.php" id="toggleRoomTypes" class="toggle-button" data-target="physical_rooms.php">Room</a>
                     <a href = "room_types.php" id="toggleRoomAssignment" class="toggle-button active" data-target="room_types.php">Room Type</a>
                 </div>
-                
             
                 <div class="header-actions">
                     <a href="add_roomtype.php" class="btn-primary">Add New Room Type</a>
                 </div>
             </div>
-           
-
+        
+            <div id="toast-message"></div>
+            
             <table class="data-table">
                 <thead>
                     <tr>
@@ -101,6 +114,38 @@
 
         </main>
     </div>
+
+
+    <script>
+    <?php
+        if (!empty($success_message) || !empty($error_message)):
+            
+            $is_error = !empty($error_message);
+            $message_text = $is_error ? $error_message : $success_message;
+    ?>
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                const toast = document.getElementById('toast-message');
+
+                toast.textContent = <?php echo json_encode($message_text); ?>;
+                
+                const toastClass = <?php echo $is_error ? "'error'" : "'success'"; ?>;
+                toast.classList.add(toastClass);
+
+                toast.classList.add('show');
+
+                setTimeout(function() {
+                    toast.classList.remove('show');
+                    
+                    setTimeout(function() {
+                        toast.classList.remove(toastClass);
+                    }, 500); 
+                    
+                }, 3000); 
+            });
+
+    <?php endif; ?>
+    </script>
 
 </body>
 </html>

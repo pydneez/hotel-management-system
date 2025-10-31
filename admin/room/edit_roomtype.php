@@ -19,7 +19,7 @@
     } elseif (isset($_POST['type_id'])) {
         $type_id = filter_input(INPUT_POST, 'type_id', FILTER_SANITIZE_NUMBER_INT);
     } else {
-        header("Location: room_types.php"); // No ID, redirect
+        header("Location: room_types.php?error=noID"); // No ID, redirect
         exit;
     }
 
@@ -94,7 +94,7 @@
                                 $stmt_insert->close();
                                 
                                 $current_image_count++; // Increment count *after* successful insert
-                                $success_message .= " New image uploaded successfully.";
+                                //$success_message .= " New image uploaded successfully.";
                             } else {
                                 $error_message .= " <strong>Upload Failed:</strong> Could not move new file " . ($i+1) . ".";
                             }
@@ -106,8 +106,12 @@
                          $error_message .= " Error uploading new file " . ($i+1) . ": Error code " . $files['error'][$i] . ".";
                     }
                 }
+                $success_message .= " New image uploaded successfully.";
             }
         }
+
+        header("Location: room_types.php?status=success2");
+        exit();
     }
 
     // --- Step 2: Fetch Data for Form (SELECT) ---
@@ -139,7 +143,7 @@
     $stmt_images->close();
     
     // Close connection only if it's still open
-    if (isset($conn) && $conn->ping()) {
+    if (isset($conn)) {
          $conn->close();
     }
 ?>
@@ -197,7 +201,7 @@
                                value="<?php echo htmlspecialchars($roomType['type_name']); ?>" required>
 
                         <label for="description">Description</label>
-                        <textarea id="description" name="description" rows="5"><?php echo htmlspecialchars($roomType['description']); ?></textarea>
+                        <textarea id="description" name="description" maxlength="255" rows="5"><?php echo htmlspecialchars($roomType['description']); ?></textarea>
 
                         <label for="base_price">Base Price ($)<span>*</span></label>
                         <input type="number" id="base_price" name="base_price"  min='0' step="0.01" 
@@ -254,7 +258,7 @@
                             </div>
                         </div>
                     </div>
-                </div> <
+                </div> 
 
                 <div class="form-submit-row">
                     <input type="submit" name="submit" value="Save All Changes" class="btn btn-primary">
@@ -392,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 handleDeleteExisting(button);
             }
             // B. Clicked delete button for a NEW image preview (only JS removal)
-            else if (button.classList.contains('delete-new-image-btn')) { 
+            else if (button.classList.contains('delete-image-btn')) { 
                  const itemToRemove = button.closest('.image-preview-item.new-image');
                  if (itemToRemove) {
                      const allNewPreviews = Array.from(imageGrid.querySelectorAll('.image-preview-item.new-image'));
@@ -423,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const deleteBtn = document.createElement('button');
             deleteBtn.type = 'button';
-            deleteBtn.className = 'delete-new-image-btn'; 
+            deleteBtn.className = 'delete-image-btn'; 
             deleteBtn.title = 'Remove New Image';
             deleteBtn.innerHTML = '&times;'; 
             

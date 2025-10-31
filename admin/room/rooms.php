@@ -1,7 +1,17 @@
 <?php
-    // Use __DIR__ to go up one level (to /admin/) and find auth_check.php
     require_once(__DIR__ . '/../auth_check.php');
-    // We'll need the $conn variable, so make sure auth_check requires connect.php
+
+    $success_message = "";
+    $error_message = ""; 
+
+    // Now, populate them if the URL parameter exists
+    if (isset($_GET['status']) && $_GET['status'] === 'success1') {
+        $success_message = "New room type has been added successfully";
+    } 
+    if (isset($_GET['status']) && $_GET['status'] === 'success2') {
+        // --- FIX: Corrected spelling ---
+        $success_message = "Room type has been edited successfully";
+    }
 ?>
 
 <!DOCTYPE html>
@@ -33,9 +43,10 @@
             
             <div class="header-actions">
                 <a href="add_room.php" class="btn-primary">Add New Physical Room</a>
-            </div>
+            </div>  
         </div>
-
+        <div id="toast-message"></div>
+        
         <table class="data-table">
             <thead>
                 <tr>
