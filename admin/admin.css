@@ -529,7 +529,7 @@ input[type="file"]::-webkit-file-upload-button:hover {
 
 /* --- Toast Notification Styling --- */
 #toast-message {
-    visibility: hidden; /* Hidden by default */
+    visibility: hidden; 
     min-width: 250px;
     margin-left: -125px;
     color: #fff;
@@ -538,19 +538,19 @@ input[type="file"]::-webkit-file-upload-button:hover {
     padding: 16px;
     position: fixed; /* This is key */
     z-index: 100;
-    right: 30px; /* Position in lower-right */
+    right: 30px; 
     bottom: 30px;
-    font-size: 16px;
+    font-size: 1rem;
+    font-weight: 500;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     
-    /* Fade in/out animation */
-    transition: opacity 0.5s, bottom 0.5s;
+ 
 }
 
 #toast-message.show {
-    visibility: visible;
-    opacity: 1;
-    bottom: 50px; 
+  visibility: visible;
+  opacity: 1;
+  bottom: 50px; 
 }
 
 
@@ -561,7 +561,7 @@ input[type="file"]::-webkit-file-upload-button:hover {
 }
 
 #toast-message.error {
-    background-color: rgba(217, 48, 37, 0.1);
+  background-color: rgba(217, 48, 37, 0.1);
   color: #d93025; 
   border-color: #d93025;
 }

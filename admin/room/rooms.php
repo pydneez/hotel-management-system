@@ -4,12 +4,14 @@
     $success_message = "";
     $error_message = ""; 
 
-    // Now, populate them if the URL parameter exists
-    if (isset($_GET['status']) && $_GET['status'] === 'success1') {
-        $success_message = "New room type has been added successfully";
+    if (isset($_GET['status']) && $_GET['status'] === 'success_add') {
+        $success_message = "New room has been added successfully";
     } 
-    if (isset($_GET['status']) && $_GET['status'] === 'success2') {
+    if (isset($_GET['status']) && $_GET['status'] === 'success_edit') {
         $success_message = "Room type has been edited successfully";
+    }
+    if (isset($_GET['error']) && $_GET['error'] === 'not_found') {
+        $error_message = "Invalid Room No.";
     }
 
     // --- PAGINATION LOGIC ---
@@ -64,15 +66,7 @@
             </div>  
         </div>
 
-        <!-- Success/Error Message Area -->
-        <div id="ajax-message-area"> 
-            <?php if (!empty($error_message)): ?>
-                <div class="form-message error"><?php echo htmlspecialchars($error_message); ?></div>
-            <?php endif; ?>
-            <?php if (!empty($success_message)): ?>
-                <div class="form-message success"><?php echo htmlspecialchars($success_message); ?></div>
-            <?php endif; ?>
-        </div>
+        <div id="toast-message"></div>
         
         <table class="data-table">
             <thead>
@@ -165,12 +159,10 @@
         <div class="pagination-controls">
             <?php if ($total_pages > 1): // Only show controls if there is more than one page ?>
 
-                <!-- Previous Button -->
                 <?php if ($page > 1): ?>
                     <a href="/admin/room/rooms.php?page=<?php echo $page - 1; ?>" class="btn btn-secondary">Previous</a>
                 <?php endif; ?>
 
-                <!-- Numbered Links -->
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                     <a href="/admin/room/rooms.php?page=<?php echo $i; ?>" 
                        class="btn <?php echo ($i == $page) ? 'btn-primary' : 'btn-secondary'; ?>">
@@ -178,7 +170,6 @@
                     </a>
                 <?php endfor; ?>
 
-                <!-- Next Button -->
                 <?php if ($page < $total_pages): ?>
                     <a href="/admin/room/rooms.php?page=<?php echo $page + 1; ?>" class="btn btn-secondary">Next</a>
                 <?php endif; ?>
@@ -190,6 +181,36 @@
     </main>
 </div>
 
+<script>
+    <?php
+        if (!empty($success_message) || !empty($error_message)):
+            
+            $is_error = !empty($error_message);
+            $message_text = $is_error ? $error_message : $success_message;
+    ?>
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                const toast = document.getElementById('toast-message');
+
+                toast.textContent = <?php echo json_encode($message_text); ?>;
+                
+                const toastClass = <?php echo $is_error ? "'error'" : "'success'"; ?>;
+                toast.classList.add(toastClass);
+
+                toast.classList.add('show');
+
+                setTimeout(function() {
+                    toast.classList.remove('show');
+                    
+                    setTimeout(function() {
+                        toast.classList.remove(toastClass);
+                    }, 500); 
+                    
+                }, 3000); 
+            });
+
+    <?php endif; ?>
+</script>
 
 </body>
 </html>
