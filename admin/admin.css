@@ -295,10 +295,7 @@ body {
   background-color: #f5f7fa;
 }
 
-/* ===============================================
-=== FORM & INPUT STYLES (ADD THIS TO ADMIN.CSS) ===
-=============================================== 
-*/
+
 label {
   display: block;
   font-weight: 600;
@@ -476,7 +473,7 @@ label span {
 
 /* Style the file input to look consistent */
 input[type="file"] {
-  width: 50%;
+  width: 90%;
   padding: 10px;
   margin-bottom: 0.5rem;
   border: 1px solid var(--border-color);
