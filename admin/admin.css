@@ -297,10 +297,8 @@ body {
 
 /* ===============================================
 === FORM & INPUT STYLES (ADD THIS TO ADMIN.CSS) ===
-===============================================
+=============================================== 
 */
-/* This ensures all forms in the admin panel are consistent */
-
 label {
   display: block;
   font-weight: 600;
@@ -349,7 +347,6 @@ select:focus {
 }
 
 /* === Form-Specific Buttons === */
-/* Base class for all buttons (<a> or <input> or <button>) */
 .btn {
   display: inline-block;
   padding: 12px 20px;
@@ -386,7 +383,6 @@ select:focus {
 }
 
 /* === Form Messages (Error/Success) === */
-/* These will match your login/registration page messages */
 .form-message {
   padding: 12px;
   border-radius: 8px;
@@ -398,13 +394,13 @@ select:focus {
 
 .form-message.error {
   background-color: rgba(217, 48, 37, 0.1);
-  color: #d93025; /* Error Red */
+  color: #d93025; 
   border-color: #d93025;
 }
 
 .form-message.success {
   background-color: rgba(30, 142, 62, 0.1);
-  color: #1e8e3e; /* Success Green */
+  color: #1e8e3e; 
   border-color: #1e8e3e;
 }
 
@@ -460,7 +456,7 @@ label span {
   right: 5px;
   width: 28px;
   height: 28px;
-  background-color: rgba(217, 48, 37, 0.85); /* Red */
+  background-color: rgba(217, 48, 37, 0.85); 
   color: white;
   border: none;
   border-radius: 50%;
@@ -474,7 +470,7 @@ label span {
 }
 
 .delete-image-btn:hover {
-  background-color: #d93025; /* Stronger Red */
+  background-color: #d93025;
   transform: scale(1.1);
 }
 
@@ -548,26 +544,83 @@ input[type="file"]::-webkit-file-upload-button:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     
     /* Fade in/out animation */
-    
     transition: opacity 0.5s, bottom 0.5s;
 }
 
-/* The class that JavaScript will add */
 #toast-message.show {
     visibility: visible;
     opacity: 1;
-    bottom: 50px; /* Slide up from bottom */
+    bottom: 50px; 
 }
 
 
 #toast-message.success {
   background-color: rgba(30, 142, 62, 0.1);
-  color: #1e8e3e; /* Success Green */
+  color: #1e8e3e; 
   border-color: #1e8e3e;
 }
 
 #toast-message.error {
     background-color: rgba(217, 48, 37, 0.1);
-  color: #d93025; /* Error Red */
+  color: #d93025; 
   border-color: #d93025;
 }
+
+/* ===============================================
+   === PAGINATION STYLES ===
+   ===============================================
+*/
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Space between buttons */
+  margin-top: 2rem; /* Space above the controls */
+}
+
+.pagination-controls .btn {
+  padding: 8px 14px;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+/* ===============================================
+   === STATUS BADGE STYLES (NEW) ===
+   ===============================================
+*/
+.status-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.status-badge.status-available {
+  background-color: #daf6e4; 
+  color: #0a6847; 
+}
+
+.status-badge.status-cleaning {
+  background-color: #fff9e0; 
+  color: #b45309; 
+}
+
+.status-badge.status-occupied {
+  background-color: #fee2e2;
+  color: #b91c1c; 
+}
+
+.status-badge.status-maintenance {
+  background-color: #d0e3fd;
+  color: #1e40af; 
+}
+
+.status-badge.status-default {
+  background-color: #f3f4f6; 
+  color: #374151; 
+}
+
