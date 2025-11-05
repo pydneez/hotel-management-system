@@ -1,20 +1,12 @@
-<!-- 
-  This is the new footer, styled using classes from main.css.
-  It's structured with a grid for the main content and a 
-  separate bottom bar for the copyright.
--->
-<footer class="footer-public">
+
+<footer class="footer-public" id = "footer">
     <div class="container footer-grid">
 
-        <!-- Column 1: About -->
         <div class="footer-col">
             <h3 class="footer-logo">RoyalStay Hotel</h3>
             <p>Experience unforgettable stays and book your perfect room with us. Luxury and comfort await.</p>
-            <!-- Staff Login Link - placed discreetly -->
-            <a href="/login.php" class="footer-staff-login">Staff Login</a>
         </div>
 
-        <!-- Column 2: Contact Info -->
         <div class="footer-col">
             <h4>Contact Info</h4>
             <ul class="footer-contact-list">
@@ -24,7 +16,6 @@
             </ul>
         </div>
 
-        <!-- Column 3: Explore -->
         <div class="footer-col">
             <h4>Explore</h4>
             <ul class="footer-links">
@@ -35,7 +26,6 @@
             </ul>
         </div>
 
-        <!-- Column 4: Subscribe -->
         <div class="footer-col">
             <h4>Subscribe Us</h4>
             <p>Subscribe for our latest updates and offers.</p>
@@ -47,7 +37,6 @@
 
     </div>
     
-    <!-- Bottom Copyright Bar -->
     <div class="footer-bottom-bar">
         <p>&copy; <?php echo date("Y"); ?> RoyalStay Hotel. All Rights Reserved.</p>
     </div>
