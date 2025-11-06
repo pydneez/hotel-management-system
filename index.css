@@ -8,6 +8,8 @@
     --border-color: #ddd;
     --content-bg: #f5f7fa;  /* Light grey background */
     --white: #ffffff;
+    --error-red: #d93025;
+    --success-green: #1e8e3e;
   }
   
   /* === GLOBAL STYLES === */
@@ -91,11 +93,7 @@
     width: auto;
     border-radius: 4px; /* Optional: adds rounded corners */
   }
-  
-/* ... existing styles for .room-card ... */
-  .room-card .btn-primary:hover {
-    background-color: #228491;
-  }
+
   
   .footer-public {
     background-color: var(--dark-blue);
@@ -104,10 +102,7 @@
     font-size: 0.95rem;
   }
    /* === FOOTER === */
-/* ... existing styles for .room-card ... */
-.room-card .btn-primary:hover {
-  background-color: #228491;
-}
+
 
 /* === FOOTER (UPDATED) === */
 .footer-public {
@@ -413,5 +408,13 @@
     background-color: #228491;
   }
   
- 
-  
+#message-display p[style*="color: red"] {
+  background-color: rgba(217, 48, 37, 0.1);
+  color: var(--error-red) !important; 
+  font-weight: 600 !important;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--error-red);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
