@@ -14,7 +14,6 @@ if (session_status() === PHP_SESSION_NONE) {
         <nav class="navbar-links">
             <a href="index.php">Home</a>
             <a href="#rooms">Rooms</a>
-            <a href="#footer">Contact</a>
             
             <?php 
             // Check if a user is logged in
