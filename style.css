@@ -1,34 +1,36 @@
-/* === Global Styles & Theme === */
+
 :root {
   --navy-blue: #0a2342;
   --dark-blue: #051930;
   --light-blue: #2ca5b5;
+  --white: #ffffff;
   --text-light: #f0f4f8;
   --text-dark: #333;
   --border-color: #ddd;
   --error-red: #d93025;
   --success-green: #1e8e3e;
   --form-bg: #ffffff;
+  --panel-bg: #f4f7f9;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
-  background-color: var(--navy-blue);
+  background-color: var(--white);
   color: var(--text-dark);
   margin: 0;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
-/* === Form Container === */
 #div_main {
-  width: 100%;
-  max-width: 500px; /* Set a max-width for larger screens */
+  flex-grow: 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  padding: 2rem 1rem; 
+  box-sizing: border-box;
 }
 
 #div_content {
@@ -37,13 +39,19 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   padding: 2.5rem;
   box-sizing: border-box;
+  width: 100%; 
+  max-width: 420px; 
+  margin: auto;
+}
+
+#div_main .display-image {
+    display: none;
 }
 
 .center {
   text-align: center;
 }
 
-/* === Typography === */
 h2 {
   color: var(--navy-blue);
   font-weight: 700;
@@ -63,7 +71,7 @@ small {
   display: block;
   font-size: 0.85em;
   color: #555;
-  margin-top: -0.5rem; /* Pulls it closer to the input above */
+  margin-top: -0.5rem; 
   margin-bottom: 1rem;
 }
 
@@ -82,7 +90,6 @@ p.center a:hover {
   text-decoration: underline;
 }
 
-/* === Inputs (The Core of Consistency) === */
 input[type="text"],
 input[type="email"],
 input[type="tel"],
@@ -92,37 +99,30 @@ input[type="password"] {
   margin-bottom: 1rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  box-sizing: border-box; /* Crucial for width: 100% to work with padding */
+  box-sizing: border-box; 
   font-size: 1rem;
   color: var(--text-dark);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* Style for focused inputs */
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="tel"]:focus,
-input[type_="password"]:focus {
+input[type="password"]:focus { 
   outline: none;
   border-color: var(--navy-blue);
   box-shadow: 0 0 0 3px rgba(10, 35, 66, 0.2);
 }
 
-/* === intl-tel-input Library Override === */
-/* * This is the magic to make the phone input consistent.
- * We target the container it creates.
-*/
 .iti {
   width: 100%;
   margin-bottom: 1rem;
 }
 
-/* Force the library's input to match our style */
 .iti input[type="tel"] {
-  margin-bottom: 0; /* Remove double margin */
+  margin-bottom: 0;
 }
 
-/* Style the dropdown menu */
 .iti__country-list {
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
@@ -152,10 +152,9 @@ input[type="submit"]:active {
 }
 
 /* === Error & Success Messages === */
-/* Style the PHP messages */
 #div_content p[style*="color: red"] {
   background-color: rgba(217, 48, 37, 0.1);
-  color: var(--error-red) !important; /* Override inline style */
+  color: var(--error-red) !important; 
   font-weight: 600 !important;
   padding: 12px;
   border-radius: 8px;
@@ -164,13 +163,182 @@ input[type="submit"]:active {
   margin-bottom: 1.5rem;
 }
 
+
 #div_content p[style*="color: green"] {
   background-color: rgba(30, 142, 62, 0.1);
-  color: var(--success-green) !important; /* Override inline style */
+  color: var(--success-green) !important; 
   font-weight: 600 !important;
   padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--success-green);
   text-align: center;
   margin-bottom: 1.5rem;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* === NAVBAR === */
+.navbar-public {
+  background-color: var(--navy-blue);
+  padding: 1rem 0;
+  border-bottom: 3px solid var(--light-blue);
+}
+
+.navbar-public .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.navbar-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 1rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.navbar-links a:hover {
+  background-color: var(--dark-blue);
+}
+
+.navbar-links a.btn-primary {
+  background-color: var(--light-blue);
+  color: var(--white);
+}
+.navbar-links a.btn-primary:hover {
+  background-color: #228491; 
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+}
+.navbar-logo img {
+  height: 40px; 
+  border-radius: 4px; 
+}
+.two-column-layout {
+  background-color:var(--navy-blue);
+  flex-grow: 1; 
+  display: flex; 
+  flex-direction: row; 
+  min-height: calc(100vh - 80px); 
+}
+
+.two-column-page {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row; 
+  min-height: calc(100vh - 80px); 
+}
+
+.panel-content {
+  flex: 1;
+  background-color: var(--navy-blue);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  padding: 4rem;
+  box-sizing: border-box;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top left, rgba(44, 165, 181, 0.1), transparent 50%);
+}
+
+.panel-content h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--white);
+}
+
+.panel-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+.panel-content .quote {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.2rem;
+  padding-left: 20px;
+  border-left: 4px solid var(--light-blue);
+  margin-top: 2rem;
+}
+
+
+.panel-form {
+  width: 100%;
+  max-width: 50%; 
+  background-color: var(--form-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+#div_subhead h2 {
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+  .two-column-page {
+    flex-direction: column; 
+    min-height: auto;
+  }
+
+  .panel-content {
+    order: 1; 
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+  .panel-content h1 {
+    font-size: 2rem;
+  }
+
+  .panel-content .quote {
+    border-left: none;
+    border-top: 2px solid var(--light-blue);
+    padding-left: 0;
+    padding-top: 15px;
+    margin-bottom: 0;
+  }
+
+  .panel-form {
+    order: 2; /* Form panel second */
+    max-width: 100%;
+    padding: 2rem 1rem;
+  }
 }
