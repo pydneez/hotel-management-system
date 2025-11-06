@@ -24,7 +24,8 @@
                     <form action="search_results.php" method="GET">
                         <div>
                             <label for="check_in">Check-in Date</label>
-                            <input type="date" id="check_in" name="check_in" required>
+                            <input type="date" id="check_in" name="check_in" 
+                                min="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                         <div>
                             <label for="check_out">Check-out Date</label>
