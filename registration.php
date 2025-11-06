@@ -132,9 +132,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-    <div id="">
-        <div id="div_main">
+    <?php include "navbar.php"; ?>
+
+    <div class="two-column-page">
+        <div class="panel-content">
+            <h1>Welcome to Royal Stay Hotel</h1>
+            <p>"Exceptional service starts here."</p>
+        </div>
+
+        <div class="panel-form">
             <div id="div_content" class="form">
 
                 <div id="div_subhead" class = "center">
@@ -154,12 +160,13 @@
                     <label for="lname">Last Name <span style="color: red;">*</span></label>
                     <input type="text" name="lname" required value="<?php echo isset($lname) ? htmlspecialchars($lname) : ''; ?>"> <br>
 
-                    <label for="email">Email <span style="color: red;">*</span></label>
-                    <input type="email" name="email" required value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>"> <br>
-
                     <label for="phone">Phone Number <span style="color: red;">*</span></label>
                     <input type="tel"  name="phone" id="phone" value="<?php echo isset($phone) ? htmlspecialchars($phone) : ''; ?>" required> <br>
 
+                    <label for="email">Email <span style="color: red;">*</span></label>
+                    <input type="email" name="email" required value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>"> <br>
+
+                    
                     <label for="password">Password <span style="color: red;">*</span></label>
                     <input type="password"  name="password" required 
                         pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
@@ -174,7 +181,7 @@
 
                 </form> 
                 <p class="center">
-                    Already have an account? <a href="login.php">Log In here</a>
+                    Already have an account? <a href="login.php">Log In</a>
                 </p>
 
             </div>
@@ -187,11 +194,9 @@
     <script>
       const phoneInput = document.querySelector("#phone");
     
-      //Initialize the library
       const iti = window.intlTelInput(phoneInput, {
         utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         
-        // Automatically selects the user's country based on their IP
         initialCountry: "auto", 
         geoIpLookup: function(callback) {
           fetch("https://ipapi.co/json")
@@ -199,17 +204,11 @@
             .then(data => callback(data.country_code))
             .catch(() => callback("us"));
         },
-        // It creates a hidden input with name="phone"
-        // and fills it with the full international number.
         hiddenInput: "phone",
-        
-        // Puts the country code in the input
+    
         separateDialCode: true,
       });
 
-      // when page reloads.
-      // We want to re-format the "sticky" number (e.g., +15551234567)
-      // that PHP put back into the 'value' attribute.
       if (phoneInput.value.trim()) {
         iti.setNumber(phoneInput.value);
       }

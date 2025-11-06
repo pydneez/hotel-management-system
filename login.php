@@ -1,8 +1,6 @@
 <?php
-    session_start(); // Must be at the very top
+    session_start();
     require_once('connect.php'); 
-
-    // --- Helper Function ---
 
     function authenticateUser($conn, $email, $password) {
         $user_data = false;
@@ -45,40 +43,47 @@
     $error_message = "";
     $success_message = ""; 
 
-    //  success message from the registration page
+    // Check for a success message from the registration page
     if (isset($_GET['status']) && $_GET['status'] === 'success') {
         $success_message = "Registration successful! You can now log in.";
     }
 
-    if (isset($_GET['error']) && $_GET['error'] === 'deleted') {
-        $error_message = "Your account has been deleted";
+    // --- NEW: Check for a redirect message from booking ---
+    if (isset($_GET['message'])) {
+        $error_message = htmlspecialchars($_GET['message']);
     }
 
+
     if (isset($_POST['submit'])) {
-        $success_message = ""; 
-        
+        $success_message = "";
+        $error_message = ""; 
+
         $email = trim($_POST['email']);
         $password = $_POST['password'];
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error_message = "Invalid email format.";
         } else {
-            // Call the helper function to authenticate
             $userData = authenticateUser($conn, $email, $password);
 
             if ($userData) {
+                // SUCCESS: Store session data
                 $_SESSION['email'] = $userData['email'];
                 $_SESSION['role'] = $userData['role'];
 
-                // Critical: Redirect based on role
+                // --- NEW: Check if we need to redirect back to booking ---
+                if (isset($_POST['redirect_url']) && !empty($_POST['redirect_url'])) {
+                    header("Location: " . $_POST['redirect_url']);
+                    exit();
+                }
+
+                // redirect based on role
                 if ($userData['role'] === 'guest') {
-                    header("Location: dashboard.php"); // Guest dashboard
+                    header("Location: index.php"); 
                 } else {
-                    header("Location: admin/dashboard.php"); // Admin/Employee dashboard
+                    header("Location: admin/dashboard.php");
                 }
                 exit();
-
-                
             } else {
                 // FAILURE: Generic error message for security
                 $error_message = "Incorrect email or password.";
@@ -86,25 +91,31 @@
         }
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login Portal | Hotel Management System</title>
-        <link rel="stylesheet" href="style.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Portal | Hotel Management System</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <?php include "navbar.php"; ?>
 
-    </head>
-    <body>
-        <div id="div_main">
+    <div class="two-column-page">
+        <div class="panel-content">
+            <h1>Welcome to Royal Stay Hotel</h1>
+            <p>"Exceptional service starts here."</p>
+        </div>
+
+        <div class="panel-form">
             <div id="div_content" class="form">
 
                 <div id="div_subhead" class="center">
                     <h2>Login</h2>
                 </div>
 
-                <!-- Error/Success message block-->
                 <?php if (!empty($error_message)): ?>
                     <p style="color: red; font-weight: bold; text-align: center;"><?php echo $error_message; ?></p>
                 <?php elseif (!empty($success_message)): ?>
@@ -112,7 +123,11 @@
                 <?php endif; ?>
 
                 <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    
+
+                    <?php if (isset($_GET['redirect'])): ?>
+                        <input type="hidden" name="redirect_url" value="<?php echo htmlspecialchars($_GET['redirect']); ?>">
+                    <?php endif; ?>
+
                     <label for="email">Email <span style="color: red;">*</span></label>
                     <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required> <br>
 
@@ -123,21 +138,20 @@
                         <input type="submit" name="submit" value="Login">
                     </div>
 
-                </form> 
-                
-                <!-- links back to your registration page -->
+                </form>
+
                 <p class="center">
-                    Don't have an account? <a href="registration.php">Sign up here</a>
+                    Don't have an account? <a href="registration.php">Sign up</a>
                 </p>
 
             </div>
         </div>
+    </div>
 
-        <?php
-            // Close the connection at the very end
-            if (isset($conn)) {
-                $conn->close();
-            }
-        ?>
-    </body>
+    <?php
+        if (isset($conn)) {
+            $conn->close();
+        }
+    ?>
+</body>
 </html>
