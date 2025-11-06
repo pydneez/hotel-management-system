@@ -1,4 +1,3 @@
-
 <footer class="footer-public" id = "footer">
     <div class="container footer-grid">
 
