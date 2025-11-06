@@ -110,8 +110,13 @@
             $result = addGuest($conn, $fname, $lname, $email, $phone, $password);
             
             if ($result === true) {
-                $success_message = "Registration successful! You can now log in.";
-                header("Location: login.php?status=success");
+                $redirect_url = "login.php";
+                if (isset($_GET['redirect'])) {
+                    $redirect_url .= "?redirect=" . urlencode($_GET['redirect']); 
+                } else {
+                    $redirect_url .= "?status=success"; 
+                }
+                header("Location: " . $redirect_url);
                 exit;
             } else {
                 $error_message = $result; 
@@ -153,6 +158,13 @@
                     <p style="color: green; font-weight: bold; text-align: center;"><?php echo $success_message; ?></p>
                 <?php endif; ?>
 
+                <?php
+                    $form_action = htmlspecialchars($_SERVER["PHP_SELF"]);
+                    if (isset($_GET['redirect'])) {
+                        $form_action .= "?redirect=" . urlencode($_GET['redirect']);
+                    }
+                ?>
+                    
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <label for="fname">First Name <span style="color: red;">*</span></label>
                     <input type="text" name="fname" required value="<?php echo isset($fname) ? htmlspecialchars($fname) : ''; ?>"> <br>

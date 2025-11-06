@@ -10,7 +10,7 @@
             $sql = "SELECT password_hash, role FROM Employees WHERE email = ?";
             $default_role = null; // Role will come from DB
         } else {
-            $sql = "SELECT password_hash FROM Guests WHERE email = ?";
+            $sql = "SELECT guest_id, password_hash FROM Guests WHERE email = ?";
             $default_role = "guest"; // Guests get a 'guest' role
         }
 
@@ -30,6 +30,9 @@
                 'email' => $email,
                 'role' => $default_role ?? $user['role'] // Use 'guest' or the DB role
             ];
+            if ($user_data['role'] === 'guest') {
+                $user_data['guest_id'] = $user['guest_id'];
+            }
         }
 
         $stmt->close();
@@ -45,10 +48,10 @@
 
     // Check for a success message from the registration page
     if (isset($_GET['status']) && $_GET['status'] === 'success') {
-        $success_message = "Registration successful! You can now log in.";
+        $success_message = "Registration successful!";
     }
 
-    // --- NEW: Check for a redirect message from booking ---
+    // Check for a redirect message from booking
     if (isset($_GET['message'])) {
         $error_message = htmlspecialchars($_GET['message']);
     }
@@ -70,10 +73,21 @@
                 // SUCCESS: Store session data
                 $_SESSION['email'] = $userData['email'];
                 $_SESSION['role'] = $userData['role'];
-
-                // --- NEW: Check if we need to redirect back to booking ---
+                
+                // --- UPDATED: Store guest_id in session ---
+                if ($userData['role'] === 'guest') {
+                    $_SESSION['guest_id'] = $userData['guest_id'];
+                }
+                // Check if we need to redirect back to booking
                 if (isset($_POST['redirect_url']) && !empty($_POST['redirect_url'])) {
+                    if (isset($conn)) { $conn->close(); }
                     header("Location: " . $_POST['redirect_url']);
+                    exit();
+                }
+
+                if (isset($_GET['redirect'])) {
+                    $redirect_url .= "?redirect=" . urlencode($_GET['redirect']);
+                    header("Location: " . $redirect_url);
                     exit();
                 }
 
@@ -98,7 +112,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Portal | Hotel Management System</title>
     <link rel="stylesheet" href="style.css">
-    
 </head>
 <body>
     <?php include "navbar.php"; ?>
@@ -140,8 +153,15 @@
 
                 </form>
 
+                <?php
+                    $reg_url = "registration.php";
+                    if (isset($_GET['redirect'])) {
+                        // Pass the redirect parameter to the registration page
+                        $reg_url .= "?redirect=" . urlencode($_GET['redirect']);
+                    }
+                ?>
                 <p class="center">
-                    Don't have an account? <a href="registration.php">Sign up</a>
+                    Don't have an account? <a href="<?php echo htmlspecialchars($reg_url); ?>">Sign up</a>
                 </p>
 
             </div>
