@@ -5,7 +5,7 @@
 <header class="navbar">
     <div class="nav-left">
         <img src="/img/hotel_logo.png" alt="Hotel Logo" class="logo">
-        <h2>RoyalStay Hotel</h2>
+        <a href = "../../index.php" style = "cursor: pointer; text-decoration: none;" ><h2>RoyalStay Hotel</h2>
     </div>
 
     <div class="nav-right">
