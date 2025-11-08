@@ -19,7 +19,7 @@
 
 
     if (empty($check_in) || empty($check_out) || empty($adults)) {
-        $error_message = "Please fill out all required fields.";
+        $error_message = "Please fill out all required fields (check-in, check-out, and adults).";
     } else {
         try {
             $check_in_date = new DateTime($check_in);
@@ -41,48 +41,14 @@
 
     // --- 2. Query for Available Rooms (if input is valid) ---
     if (empty($error_message) && $num_nights > 0) {
-        /*
-         * This is the core availability query. It checks:
-         * 1. The RoomType capacity is high enough.
-         * 2. There EXISTS at least one physical room of that type...
-         * 3. ...that is NOT under 'Maintenance'...
-         * 4. ...and is NOT in the reservations table during the overlapping dates.
-         */
-        $query = "
-            SELECT 
-                rt.*,
-                (SELECT rti.image_url 
-                 FROM RoomTypeImages rti 
-                 WHERE rti.type_id = rt.type_id 
-                 LIMIT 1) AS main_image_url,
-                fn_CalculateTotalCost(rt.type_id, ?) AS total_cost 
-            FROM 
-                RoomTypes rt
-            WHERE 
-                rt.capacity >= ?
-            AND
-                EXISTS (
-                    SELECT 1
-                    FROM Rooms r
-                    WHERE r.type_id = rt.type_id 
-                    AND r.status != 'Maintenance'
-                    AND r.room_no NOT IN (
-                        SELECT res.room_no
-                        FROM reservations res
-                        WHERE res.status != 'Cancelled'
-                        AND res.room_no IS NOT NULL
-                        -- The Overlap Check:
-                        AND res.checkin_date < ?  -- A booking starts BEFORE user wants to leave
-                        AND res.checkout_date > ? -- A booking ends AFTER user wants to arrive
-                    )
-                )
-            ORDER BY
-                rt.base_price ASC
-        ";
+        
+        // --- UPDATED: Call the Stored Procedure ---
+        // This one line replaces the entire 25-line query
+        $query = "CALL sp_SearchAvailableRoomTypes(?, ?, ?, ?)";
         
         $stmt = $conn->prepare($query);
-        // i = num_nights, i = total_guests, s = check_out, s = check_in
-        $stmt->bind_param("iiss", $num_nights, $total_guests, $check_out, $check_in);
+        // s = check_in, s = check_out, i = total_guests, i = num_nights
+        $stmt->bind_param("ssii", $check_in, $check_out, $total_guests, $num_nights);
         $stmt->execute();
         $result = $stmt->get_result();
         
@@ -136,7 +102,7 @@
                                value="<?php echo htmlspecialchars($children); ?>">
                     </div>
                     <div>
-                        <label>&nbsp;</label> <!-- Spacer label -->
+                        <label>&nbsp;</label> 
                         <input type="submit" value="Edit Search" class="btn-primary">
                     </div>
                 </form>
@@ -156,9 +122,7 @@
                 <?php if (empty($error_message) && !empty($available_rooms)): ?>
                     <?php foreach($available_rooms as $room): ?>
                         <?php
-                            // --- Smart "Book Now" Link ---
-                            $booking_url = "booking_confirm.php?type_id={$room['type_id']}&check_in={$check_in}&check_out={$check_out}&guests={$total_guests}&nights={$num_nights}&cost={$room['total_cost']}";
-                            
+                            $booking_url = "booking_confirm.php?type_id={$room['type_id']}&check_in={$check_in}&check_out={$check_out}&adults={$adults}&children={$children}&nights={$num_nights}&cost={$room['total_cost']}";                            
                             // Check if a GUEST (not staff) is logged in
                             if (isset($_SESSION['email']) && $_SESSION['role'] === 'guest') {
                                 $book_now_link = $booking_url;
@@ -176,6 +140,7 @@
 
                             <div class="room-card-content">
                                 <h3><?php echo htmlspecialchars($room['type_name']); ?></h3>
+
                                 <!-- Show TOTAL price, not per-night -->
                                 <div class="room-card-price">
                                     $<?php echo htmlspecialchars(number_format($room['total_cost'], 2)); ?>
@@ -198,7 +163,6 @@
                                     </ul>
                                 <?php endif; ?>
 
-                                <!-- Use the dynamic link -->
                                 <a href="<?php echo htmlspecialchars($book_now_link); ?>" class="btn-primary">
                                     Book Now
                                 </a>
