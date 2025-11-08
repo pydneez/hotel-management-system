@@ -74,7 +74,7 @@
                 $_SESSION['email'] = $userData['email'];
                 $_SESSION['role'] = $userData['role'];
                 
-                // --- UPDATED: Store guest_id in session ---
+                // Store guest_id in session ---
                 if ($userData['role'] === 'guest') {
                     $_SESSION['guest_id'] = $userData['guest_id'];
                 }
