@@ -13,7 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
         <nav class="navbar-links-desktop">
             <a href="index.php">Home</a>
-            <a href="search_results.php">Rooms</a>
+            <a href="#rooms">Rooms</a>
             
             <?php 
             if (isset($_SESSION['email']) && isset($_SESSION['role'])):
