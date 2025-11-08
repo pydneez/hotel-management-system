@@ -42,8 +42,6 @@
     // --- 2. Query for Available Rooms (if input is valid) ---
     if (empty($error_message) && $num_nights > 0) {
         
-        // --- UPDATED: Call the Stored Procedure ---
-        // This one line replaces the entire 25-line query
         $query = "CALL sp_SearchAvailableRoomTypes(?, ?, ?, ?)";
         
         $stmt = $conn->prepare($query);
