@@ -1,61 +1,4 @@
 <?php
-<<<<<<< HEAD
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Use __DIR__ to go up one level (to /admin/) and find auth_check.php
-require_once(__DIR__ . '/../auth_check.php');
-// Assume you have a db_connect.php file in your /admin/ folder
-require_once(__DIR__ . '/../../connect.php');
-
-// --- Handle Search ---
-$search_query = isset($_GET['search']) ? trim($_GET['search']) : '';
-$sql_where = " WHERE r.checkout_date >= CURDATE()"; // User requirement
-$params = [];
-$types = "";
-
-if (!empty($search_query)) {
-    $search_param = "%" . $search_query . "%";
-    // Check if search query is numeric to also search by res_id
-    if (is_numeric($search_query)) {
-        $sql_where .= " AND (CONCAT(g.fname, ' ', g.lname) LIKE ? OR r.res_id = ?)";
-        $params[] = $search_param;
-        $params[] = $search_query;
-        $types .= "si";
-    } else {
-        $sql_where .= " AND CONCAT(g.fname, ' ', g.lname) LIKE ?";
-        $params[] = $search_param;
-        $types .= "s";
-    }
-}
-
-// --- Main Query ---
-// This query now joins roomtypes directly from reservations.type_id
-$sql = "
-    SELECT 
-        r.res_id, r.checkin_date, r.checkout_date, r.status, r.room_no, 
-        r.type_id, 
-        g.fname, g.lname, 
-        rt.type_name
-    FROM 
-        reservations r
-    JOIN 
-        guests g ON r.guest_id = g.guest_id
-    JOIN 
-        roomtypes rt ON r.type_id = rt.type_id
-    $sql_where
-    ORDER BY 
-        r.checkin_date ASC
-";
-
-$stmt = $conn->prepare($sql);
-if (!empty($params)) {
-    $stmt->bind_param($types, ...$params);
-}
-$stmt->execute();
-$result = $stmt->get_result();
-=======
     require_once(__DIR__ . '/../auth_check.php');
 
     // --- Check for success/error messages from actions ---
@@ -152,7 +95,6 @@ $result = $stmt->get_result();
     }
     $stmt->execute();
     $result = $stmt->get_result();
->>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
 
 ?>
 
@@ -258,23 +200,14 @@ $result = $stmt->get_result();
     <?php include "../component/sidebar.php"; ?>
 
     <main class="content">
-<<<<<<< HEAD
-        <div class="page-header">
-=======
         <div class="content-header-row">
->>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
             <h1>Reservations</h1>
             <a href="add_reservation.php" class="btn btn-primary">Add New Reservation</a>
         </div>
 
         <form method="GET" action="reservations.php" class="search-form">
-<<<<<<< HEAD
-            <input type="text" name="search" value="<?= htmlspecialchars($search_query) ?>" placeholder="Search Guest Name or Booking ID...">
-            <button type="submit" class="btn">Search</button>
-=======
             <input type="text" name="search" value="<?= htmlspecialchars($search_query) ?>" placeholder="Search Guest Name, Booking ID, or Room No...">
             <button type="submit" class="btn btn-primary">Search</button>
->>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
         </form>
 
         <br>
@@ -296,9 +229,6 @@ $result = $stmt->get_result();
                 <?php if ($result->num_rows > 0): ?>
                     <?php while($row = $result->fetch_assoc()): ?>
                         <?php 
-<<<<<<< HEAD
-                            $status_class = 'status-' . strtolower(str_replace(' ', '-', $row['status']));
-=======
                             $status_text = htmlspecialchars($row['status']);
                             $status_class = 'status-default'; // Fallback
                             switch (strtolower($status_text)) {
@@ -318,7 +248,6 @@ $result = $stmt->get_result();
                                     $status_class = 'status-cancelled'; 
                                     break;
                             }
->>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
                         ?>
                         <tr>
                             <td><?= $row['res_id'] ?></td>
@@ -327,16 +256,6 @@ $result = $stmt->get_result();
                             <td><?= $row['room_no'] ? htmlspecialchars($row['room_no']) : 'N/A' ?></td>
                             <td><?= date('Y-m-d', strtotime($row['checkin_date'])) ?></td>
                             <td><?= date('Y-m-d', strtotime($row['checkout_date'])) ?></td>
-<<<<<<< HEAD
-                            <td><span class="status-badge <?= $status_class ?>"><?= htmlspecialchars($row['status']) ?></span></td>
-                            <td>
-                                <?php if ($row['status'] == 'Confirmed'): ?>
-                                    <button class="btn btn-checkin" onclick="openCheckinModal(
-                                        <?= $row['res_id'] ?>,
-                                        <?= $row['type_id'] ?>,
-                                        '<?= htmlspecialchars($row['fname'] . ' ' . $row['lname']) ?>',
-                                        '<?= htmlspecialchars($row['type_name']) ?>'
-=======
                             
                             <td><span class="status-badge <?= $status_class ?>"><?= $status_text ?></span></td>
                             <td>
@@ -347,7 +266,6 @@ $result = $stmt->get_result();
                                         <?= $row['type_id'] ?>,
                                         '<?= htmlspecialchars(addslashes($row['fname'] . ' ' . $row['lname'])) ?>',
                                         '<?= htmlspecialchars(addslashes($row['type_name'])) ?>'
->>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
                                     )">
                                         Check In
                                     </button>
@@ -358,23 +276,12 @@ $result = $stmt->get_result();
                                         Check Out
                                     </a>
                                 <?php endif; ?>
-<<<<<<< HEAD
-=======
                                 </div>
->>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-<<<<<<< HEAD
-                        <td colspan="8">No reservations found matching your criteria.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-
-=======
                         <td colspan="8" style="text-align: center;">No reservations found matching your criteria.</td>
                     </tr>
                 <?php endif; ?>
@@ -421,7 +328,6 @@ $result = $stmt->get_result();
             <?php endif; ?>
         </div>
 
->>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
     </main>
 </div>
 
