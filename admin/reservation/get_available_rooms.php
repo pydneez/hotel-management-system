@@ -1,6 +1,10 @@
 <?php
 require_once(__DIR__ . '/../auth_check.php'); // Secure this endpoint
+<<<<<<< HEAD
 require_once(__DIR__ . '/../../connect.php');
+=======
+
+>>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
 
 $type_id = isset($_GET['type_id']) ? intval($_GET['type_id']) : 0;
 

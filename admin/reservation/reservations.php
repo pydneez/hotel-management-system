@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -54,6 +55,104 @@ if (!empty($params)) {
 }
 $stmt->execute();
 $result = $stmt->get_result();
+=======
+    require_once(__DIR__ . '/../auth_check.php');
+
+    // --- Check for success/error messages from actions ---
+    $error_message = "";
+    $success_message = "";
+    if (isset($_GET['status'])) {
+        if ($_GET['status'] === 'checkin_success') {
+            $success_message = "Guest checked in successfully.";
+        } elseif ($_GET['status'] === 'checkout_success') {
+            $success_message = "Guest checked out successfully.";
+        }
+    }
+    if (isset($_GET['error'])) {
+        $error_message = htmlspecialchars(urldecode($_GET['error']));
+    }
+    if (isset($_GET['msg'])) {
+        $success_message = htmlspecialchars(urldecode($_GET['msg']));
+    }
+    // --- End message check ---
+
+
+    // --- 1. Handle Search ---
+    $search_query = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $sql_where = " WHERE r.status IN ('Confirmed', 'Checked-In')"; // Default filter
+    $params = [];
+    $types = "";
+
+    if (!empty($search_query)) {
+        $search_param = "%" . $search_query . "%";
+        if (is_numeric($search_query)) {
+            $sql_where .= " AND (CONCAT(g.fname, ' ', g.lname) LIKE ? OR r.res_id = ? OR r.room_no = ?)";
+            $params[] = $search_param;
+            $params[] = $search_query;
+            $params[] = $search_query;
+            $types .= "sis";
+        } else {
+            $sql_where .= " AND CONCAT(g.fname, ' ', g.lname) LIKE ?";
+            $params[] = $search_param;
+            $types .= "s";
+        }
+    }
+
+    // --- 2. PAGINATION LOGIC ---
+    $limit = 10; // 10 bookings per page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    if ($page < 1) $page = 1;
+
+    // Get total number of matching reservations
+    $count_sql = "SELECT COUNT(r.res_id) as total 
+                  FROM reservations r
+                  JOIN guests g ON r.guest_id = g.guest_id
+                  JOIN roomtypes rt ON r.type_id = rt.type_id
+                  $sql_where";
+                  
+    $count_stmt = $conn->prepare($count_sql);
+    if (!empty($params)) {
+        $count_stmt->bind_param($types, ...$params);
+    }
+    $count_stmt->execute();
+    $total_rows = $count_stmt->get_result()->fetch_assoc()['total'];
+    $total_pages = ceil($total_rows / $limit);
+    $count_stmt->close();
+
+    // Calculate the offset
+    $offset = ($page - 1) * $limit;
+
+    // --- 3. Main Query ---
+    $sql = "
+        SELECT 
+            r.res_id, r.checkin_date, r.checkout_date, r.status, r.room_no, 
+            r.type_id, 
+            g.fname, g.lname, 
+            rt.type_name
+        FROM 
+            reservations r
+        JOIN 
+            guests g ON r.guest_id = g.guest_id
+        JOIN 
+            roomtypes rt ON r.type_id = rt.type_id
+        $sql_where
+        ORDER BY 
+            r.checkin_date ASC
+        LIMIT ? OFFSET ?
+    ";
+
+    // Add pagination params to the list
+    $params[] = $limit;
+    $params[] = $offset;
+    $types .= "ii";
+
+    $stmt = $conn->prepare($sql);
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+>>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
 
 ?>
 
@@ -159,14 +258,23 @@ $result = $stmt->get_result();
     <?php include "../component/sidebar.php"; ?>
 
     <main class="content">
+<<<<<<< HEAD
         <div class="page-header">
+=======
+        <div class="content-header-row">
+>>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
             <h1>Reservations</h1>
             <a href="add_reservation.php" class="btn btn-primary">Add New Reservation</a>
         </div>
 
         <form method="GET" action="reservations.php" class="search-form">
+<<<<<<< HEAD
             <input type="text" name="search" value="<?= htmlspecialchars($search_query) ?>" placeholder="Search Guest Name or Booking ID...">
             <button type="submit" class="btn">Search</button>
+=======
+            <input type="text" name="search" value="<?= htmlspecialchars($search_query) ?>" placeholder="Search Guest Name, Booking ID, or Room No...">
+            <button type="submit" class="btn btn-primary">Search</button>
+>>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
         </form>
 
         <br>
@@ -188,7 +296,29 @@ $result = $stmt->get_result();
                 <?php if ($result->num_rows > 0): ?>
                     <?php while($row = $result->fetch_assoc()): ?>
                         <?php 
+<<<<<<< HEAD
                             $status_class = 'status-' . strtolower(str_replace(' ', '-', $row['status']));
+=======
+                            $status_text = htmlspecialchars($row['status']);
+                            $status_class = 'status-default'; // Fallback
+                            switch (strtolower($status_text)) {
+                                case 'confirmed':
+                                    $status_class = 'status-confirmed'; 
+                                    break;
+                                case 'pending':
+                                    $status_class = 'status-pending'; 
+                                    break;
+                                case 'checked-in':
+                                    $status_class = 'status-checked-in'; 
+                                    break;
+                                case 'checked-out':
+                                    $status_class = 'status-checked-out'; 
+                                    break;
+                                case 'cancelled':
+                                    $status_class = 'status-cancelled'; 
+                                    break;
+                            }
+>>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
                         ?>
                         <tr>
                             <td><?= $row['res_id'] ?></td>
@@ -197,6 +327,7 @@ $result = $stmt->get_result();
                             <td><?= $row['room_no'] ? htmlspecialchars($row['room_no']) : 'N/A' ?></td>
                             <td><?= date('Y-m-d', strtotime($row['checkin_date'])) ?></td>
                             <td><?= date('Y-m-d', strtotime($row['checkout_date'])) ?></td>
+<<<<<<< HEAD
                             <td><span class="status-badge <?= $status_class ?>"><?= htmlspecialchars($row['status']) ?></span></td>
                             <td>
                                 <?php if ($row['status'] == 'Confirmed'): ?>
@@ -205,6 +336,18 @@ $result = $stmt->get_result();
                                         <?= $row['type_id'] ?>,
                                         '<?= htmlspecialchars($row['fname'] . ' ' . $row['lname']) ?>',
                                         '<?= htmlspecialchars($row['type_name']) ?>'
+=======
+                            
+                            <td><span class="status-badge <?= $status_class ?>"><?= $status_text ?></span></td>
+                            <td>
+                                <div class="action-buttons">
+                                <?php if ($row['status'] == 'Confirmed' || $row['status'] == 'Pending'): ?>
+                                    <button class="btn btn-checkin" onclick="openCheckinModal(
+                                        <?= $row['res_id'] ?>,
+                                        <?= $row['type_id'] ?>,
+                                        '<?= htmlspecialchars(addslashes($row['fname'] . ' ' . $row['lname'])) ?>',
+                                        '<?= htmlspecialchars(addslashes($row['type_name'])) ?>'
+>>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
                                     )">
                                         Check In
                                     </button>
@@ -215,17 +358,70 @@ $result = $stmt->get_result();
                                         Check Out
                                     </a>
                                 <?php endif; ?>
+<<<<<<< HEAD
+=======
+                                </div>
+>>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
+<<<<<<< HEAD
                         <td colspan="8">No reservations found matching your criteria.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
         </table>
 
+=======
+                        <td colspan="8" style="text-align: center;">No reservations found matching your criteria.</td>
+                    </tr>
+                <?php endif; ?>
+                
+                <?php 
+                    // Show total count row only if there are results
+                    if ($total_rows > 0) {
+                        $start_record = $offset + 1;
+                        $end_record = $offset + $result->num_rows;
+                        
+                        echo "<tr><td colspan='8' class='table-footer'>
+                                Showing $start_record - $end_record of $total_rows total records
+                            </td></tr>";
+                    }
+                ?>
+            </tbody>
+        </table>
+
+        <div class="pagination-controls">
+            <?php if ($total_pages > 1): ?>
+                
+                <?php 
+                    $search_param_url = !empty($search_query) ? '&search=' . urlencode($search_query) : '';
+                ?>
+
+                <!-- Previous Button -->
+                <?php if ($page > 1): ?>
+                    <a href="reservations.php?page=<?php echo $page - 1; ?><?php echo $search_param_url; ?>" class="btn btn-secondary">Previous</a>
+                <?php endif; ?>
+
+                <!-- Numbered Links -->
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="reservations.php?page=<?php echo $i; ?><?php echo $search_param_url; ?>" 
+                       class="btn <?php echo ($i == $page) ? 'btn-primary' : 'btn-secondary'; ?>">
+                        <?php echo $i; ?>
+                    </a>
+                <?php endfor; ?>
+
+                <!-- Next Button -->
+                <?php if ($page < $total_pages): ?>
+                    <a href="reservations.php?page=<?php echo $page + 1; ?><?php echo $search_param_url; ?>" class="btn btn-secondary">Next</a>
+                <?php endif; ?>
+
+            <?php endif; ?>
+        </div>
+
+>>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
     </main>
 </div>
 

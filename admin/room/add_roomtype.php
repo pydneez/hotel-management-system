@@ -188,7 +188,6 @@
     </main>
 </div>
 
-<!-- === UPDATED JAVASCRIPT FOR PREVIEWING & DELETING === -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const imageInput = document.getElementById('images');
