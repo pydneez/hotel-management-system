@@ -18,7 +18,7 @@
     if ($page < 1) $page = 1;
 
     // Get total number of *checked-in* guests
-    $count_stmt = $conn->prepare("SELECT COUNT(res_id) as total FROM view_ReservationDetails WHERE status = 'Checked-In'");
+    $count_stmt = $conn->prepare("SELECT COUNT(res_id) as total FROM reservations WHERE status = 'Checked-In'");
     $count_stmt->execute();
     $total_rows = $count_stmt->get_result()->fetch_assoc()['total'];
     $total_pages = ceil($total_rows / $limit);

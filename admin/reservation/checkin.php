@@ -21,7 +21,7 @@
 
     // Get total number of guests waiting for check-in
     $count_sql = "SELECT COUNT(res_id) as total 
-                  FROM view_ReservationDetails 
+                  FROM reservations
                   WHERE status = 'Confirmed' AND checkin_date <= CURDATE()";
                   
     $count_stmt = $conn->prepare($count_sql);
