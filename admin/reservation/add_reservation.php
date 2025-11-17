@@ -165,11 +165,4 @@
 
 </body>
 
-<<<<<<< HEAD
 </html>
-<?php
-$conn->close();
-?>
-=======
-</html>
->>>>>>> a9e9cbd (feat: reservation dashboard, walk-in reservation, check-in, check-out, all updated accordingly)
