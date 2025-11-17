@@ -1,6 +1,7 @@
 <?php
     // Get the name of the current script (e.g., "dashboard.php")
     $current_page = basename($_SERVER['SCRIPT_NAME']);
+     $current_directory = basename(dirname($_SERVER['SCRIPT_NAME']));
 ?>
 <aside class="sidebar">
     <h3>Staff Menu</h3>
@@ -25,16 +26,25 @@
                 📅 Reservations
             </a>
         </li>
-        <li>
-            <a href="/admin/room/rooms.php" class="<?php echo ($current_page == 'rooms.php' || $current_page == 'room_types.php'  ) ? 'active' : ''; ?>">
-                🧹 Room
-            </a>
-        </li>
-        <li>
-            <a href="/admin/employee/employees.php" class="<?php echo ($current_page == 'employees.php') ? 'active' : ''; ?>">
-                👥 Employees
-            </a>
-        </li>
+        <?php // --- ADMIN-ONLY LINKS --- ?>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin'): ?>
+            <li>
+                <a href="/admin/room/rooms.php" class="<?php echo ($current_directory == 'room') ? 'active' : ''; ?>">
+                    🧹 Rooms
+                </a>
+            </li>
+            <li>
+                <a href="/admin/employee/employees.php" class="<?php echo ($current_directory == 'employee') ? 'active' : ''; ?>">
+                    👥 Employees
+                </a>
+            </li>
+            <li>
+                <a href="/admin/analytic/analytics.php" class="<?php echo ($current_page == 'analytics') ? 'active' : ''; ?>">
+                    📈  Analytics
+                </a>
+            </li>
+        <?php endif; ?>
+        <?php ?>
     </ul>
 </aside>
 
