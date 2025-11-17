@@ -98,27 +98,6 @@
                 <span class="status-maintenance"><?= formatCountShort($rooms_maintenance) ?></span>
             </div>
         </div>
-
-        <h2 style="margin-top: 2rem;">This Month's Financials</h2>
-        <div class="dashboard-widgets">
-             <div class="card">
-                Revenue (MTD)
-                <span class="status-clean"><?php echo formatCurrencyShort($revenue_mtd); ?></span>
-            </div>
-             <div class="card">
-                Refunds (MTD)
-                <span class="status-cleaning"><?php echo formatCurrencyShort($refunds_issued_today); ?></span>
-            </div>
-            <div class="card">
-                Outstanding (Past Due)
-                <span class="status-occupied"><?php echo formatCurrencyShort($unpaid_total); ?></span>
-            </div>
-             <div class="card">
-                Past Due Invoices
-                <span><?php echo formatCountShort($outstanding_count); ?></span>
-            </div>
-        </div>
-
     </main>
 </div>
 
