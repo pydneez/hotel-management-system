@@ -171,8 +171,6 @@
     </main>
 </div>
 
-<!-- REMOVED: Check-in modal and script, as they are not needed on this page -->
-
 </body>
 </html>
 <?php
