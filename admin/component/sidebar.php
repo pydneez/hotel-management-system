@@ -39,7 +39,7 @@
                 </a>
             </li>
             <li>
-                <a href="/admin/analytic/analytics.php" class="<?php echo ($current_page == 'analytics') ? 'active' : ''; ?>">
+                <a href="/admin/analytic/analytics.php" class="<?php echo ($current_directory == 'analytic') ? 'active' : ''; ?>">
                     📈  Analytics
                 </a>
             </li>
