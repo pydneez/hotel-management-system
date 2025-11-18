@@ -84,15 +84,16 @@
                             <td><?php echo $row['capacity']; ?></td>
                             <td><?php echo htmlspecialchars($row['amenities']); ?></td>
                             <td>
-                                <!-- Fixed Action Icons -->
                                 <div class="action-icons">
 
                                     <a href='edit_roomtype.php?type_id=<?php echo $row['type_id']; ?>'>
                                         <img src="/img/Modify.png" alt="Edit" width="24" height="24" title="Edit">
                                     </a>
-                                    <a href='delinfo.php?type_id=<?php echo $row['type_id']; ?>'>
+                                    <!--
+                                    <a href='delete_roomtype.php?type_id=<?php echo $row['type_id']; ?>'>
                                         <img src="/img/Delete.png" alt="Delete" width="24" height="24" title="Delete">
                                     </a>
+                                    -->
                                 </div>
                             </td>
                         </tr>                               
