@@ -114,8 +114,8 @@
                         <tr>
                             <td><?php echo htmlspecialchars($row['guest_name']); ?></td>
                             <td><?php echo htmlspecialchars($row['type_name']); ?></td>
-                            <td><?php echo htmlspecialchars($row['checkin_date']); ?></td>
-                            <td><?php echo htmlspecialchars($row['checkout_date']); ?></td>
+                            <td><?php echo date('Y-m-d', strtotime($row['checkin_date'])); ?></td>
+                            <td><?php echo date('Y-m-d', strtotime($row['checkout_date'])); ?></td>
                             <td>
                                 <span class="status-badge <?php echo $status_class; ?>">
                                     <?php echo $status_text; ?>
@@ -180,7 +180,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeCheckinModal()">&times;</span>
             <h2>Assign Room for Check-in</h2>
-            <form action="reservation_action.php?action=checkin_assign" method="POST">
+            <form action="reservation_action.php?action=checkin" method="POST">
                 <input type="hidden" id="modal_res_id" name="res_id">
                 
                 <p><strong>Booking ID:</strong> <span id="modal_res_id_display"></span></p>

@@ -31,8 +31,7 @@
     // Fetches all guests who are currently 'Checked-In' using the View
     $q = "SELECT 
             res_id, guest_name, room_no, type_name, 
-            checkin_date, checkout_date, status,
-            checkin_time
+            checkin_date, checkout_date, status
         FROM view_ReservationDetails
         WHERE status = 'Checked-In'
         ORDER BY checkout_date ASC, guest_name ASC
@@ -102,18 +101,15 @@
                      echo "<tr><td colspan='7' style='text-align:center;'>No guests are currently checked in.</td></tr>";
                 } else {
                     while ($row = $result->fetch_assoc()) { 
-                        $checkin_datetime = 'N/A'; // Default
-                        if (!empty($row['checkin_time'])) {
-                            // Format the timestamp
-                            $checkin_datetime = date('Y-m-d H:i A', strtotime($row['checkin_time']));
-                        }
+                        // Since checkin_date is now a DATETIME, we can just format it directly
+                        $checkin_datetime = date('Y-m-d H:i A', strtotime($row['checkin_date']));
                     ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['guest_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['room_no']); ?></td>
                         <td><?php echo htmlspecialchars($row['type_name']); ?></td>
-                        <td><?php echo $checkin_datetime; // This is now safe ?></td>
-                        <td><?php echo htmlspecialchars($row['checkout_date']); ?></td>
+                        <td><?php echo htmlspecialchars($row['checkin_date']); ?></td>
+                        <td><?php echo date('Y-m-d', strtotime($row['checkout_date']));?></td>
                         <td>
                             <span class="status-badge status-checked-in">
                                 <?php echo htmlspecialchars($row['status']); ?>
