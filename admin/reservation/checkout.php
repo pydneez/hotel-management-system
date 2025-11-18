@@ -101,7 +101,6 @@
                      echo "<tr><td colspan='7' style='text-align:center;'>No guests are currently checked in.</td></tr>";
                 } else {
                     while ($row = $result->fetch_assoc()) { 
-                        // Since checkin_date is now a DATETIME, we can just format it directly
                         $checkin_datetime = date('Y-m-d H:i A', strtotime($row['checkin_date']));
                     ?>
                     <tr>
