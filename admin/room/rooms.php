@@ -10,6 +10,9 @@
     if (isset($_GET['status']) && $_GET['status'] === 'success_edit') {
         $success_message = "Room type has been edited successfully";
     }
+    if (isset($_GET['status']) && $_GET['status'] === 'success_delete') {
+        $success_message = "Room has been deleted successfully";
+    }
     if (isset($_GET['error']) && $_GET['error'] === 'not_found') {
         $error_message = "Invalid Room No.";
     }
@@ -132,6 +135,7 @@
                                 <a href='/admin/room/edit_room.php?room_no=<?php echo $row['room_no']; ?>'>
                                     <img src="/img/Modify.png" alt="Edit" width="24" height="24" title="Edit">
                                 </a>
+                                
                                 <a href='/admin/room/delete_room.php?room_no=<?php echo $row['room_no']; ?>' onclick="return confirm('Are you sure you want to delete this room?');">
                                     <img src="/img/Delete.png" alt="Delete" width="24" height="24" title="Delete">
                                 </a>
