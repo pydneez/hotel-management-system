@@ -29,11 +29,9 @@
         SELECT 
             r.res_id, r.checkin_date, r.checkout_date, r.total_nights, 
             r.total_cost, r.status, r.num_adults, r.num_children,
-            rt.type_name,
-            rm.room_no
+            rt.type_name
         FROM reservations r
         JOIN RoomTypes rt ON r.type_id = rt.type_id
-        LEFT JOIN Rooms rm ON r.room_no = rm.room_no -- LEFT JOIN in case room_no is NULL
         WHERE r.guest_id = ?
         ORDER BY r.checkin_date DESC
     ";
@@ -84,7 +82,7 @@
                     <div class="card no-results-message">
                         <h3>You have no bookings.</h3>
                         <p>Why not find your perfect room?</p>
-                        <a href="search_results.php" class="btn-primary" style="margin-top: 1rem;">Find a Room</a>
+                        <a href="index.php" class="btn-primary" style="margin-top: 1rem;">Find a Room</a>
                     </div>
                 <?php else: ?>
                     <?php foreach ($bookings as $booking): 
@@ -101,9 +99,7 @@
                                                     <h3><?php echo htmlspecialchars($booking['type_name']); ?></h3>
                                                 </div>
                                                 <div>
-                                                    <?php if($booking['room_no']): ?>
-                                                        <span class="room-badge">Room <?php echo htmlspecialchars($booking['room_no']); ?></span>
-                                                        <?php else: ?>
+                                                    <?php if($booking['status']): ?>
                                                         <?php
                                                             $status_text = htmlspecialchars($booking['status']);
                                                             $status_class = 'status-default'; // Fallback
@@ -125,9 +121,10 @@
                                                                     break;
                                                             }
                                                         ?>
-                                                        <span class="status-badge <?php echo $status_class; ?>">
-                                                            <?php echo $status_text; ?>
-                                                        </span>
+                                                            <span class="status-badge <?php echo $status_class; ?>">
+                                                                <?php echo $status_text; ?>
+                                                            </span>
+                                                        
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -138,11 +135,11 @@
                                         <ul class="booking-details-list">
                                             <li>
                                                 <span>Check-in:</span>
-                                                <strong><?php echo htmlspecialchars($booking['checkin_date']); ?></strong>
+                                                <strong><?php echo date('Y-m-d', strtotime($booking['checkin_date'])); ?></strong>
                                             </li>
                                             <li>
                                                 <span>Check-out:</span>
-                                                <strong><?php echo htmlspecialchars($booking['checkout_date']); ?></strong>
+                                                <strong><?php echo date('Y-m-d', strtotime($booking['checkout_date'])); ?></strong>
                                             </li>
                                             <li>
                                                 <span>Guests:</span>
