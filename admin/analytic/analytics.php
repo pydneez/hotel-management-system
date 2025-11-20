@@ -1,13 +1,61 @@
 <?php
     require_once(__DIR__ . '/../auth_check.php');
 
+    // --- 1. Get Filter Data & Calculate Date Ranges ---
+    $selected_month = isset($_GET['month']) ? (int)$_GET['month'] : date('m');
+    $selected_year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+
+    // Calculate specific start/end dates
+    if ($selected_month == 0) {
+        $start_date = "$selected_year-01-01";
+        $end_date   = "$selected_year-12-31";
+    } else {
+        $start_date = "$selected_year-" . str_pad($selected_month, 2, '0', STR_PAD_LEFT) . "-01";
+        $end_date   = date("Y-m-t", strtotime($start_date)); // Last day of that month
+    }
+
+    $kpi_data = [];
+    $table_data = [];
 
     try {
+        // --- 2. Call the Stored Procedure for KPIs ---
+        $stmt_kpi = $conn->prepare("CALL sp_GetFinancialAnalytics(?, ?)");
+        if (!$stmt_kpi) throw new Exception("Prepare failed: " . $conn->error);
         
+        $stmt_kpi->bind_param("ii", $selected_year, $selected_month);
+        $stmt_kpi->execute();
+        $kpi_data = $stmt_kpi->get_result()->fetch_assoc();
+        $stmt_kpi->close();
         
+        // Clear 'more results' so we can run the next query
+        while($conn->more_results()) { 
+            $conn->next_result(); 
+            if($res = $conn->store_result()) { $res->free(); } 
+        }
+
+        // --- 3. Call the Optimized Stored Procedure for Top Rooms ---
+        $stmt_table = $conn->prepare("CALL sp_GetTopRoomRevenues(?, ?)");
+        if (!$stmt_table) throw new Exception("Prepare table failed: " . $conn->error);
         
+        $stmt_table->bind_param("ss", $start_date, $end_date);
+        $stmt_table->execute();
+        $result_table = $stmt_table->get_result();
+        
+        if ($result_table) {
+            while ($row = $result_table->fetch_assoc()) {
+                $table_data[] = $row;
+            }
+        }
+        $stmt_table->close();
+        
+        // Clear results again just to be safe
+        while($conn->more_results()) { 
+            $conn->next_result(); 
+            if($res = $conn->store_result()) { $res->free(); } 
+        }
+
     } catch (Exception $e) {
-       
+        die("<div class='card' style='color:red; padding:2rem;'><strong>Error:</strong> " . $e->getMessage() . "</div>");
     }
 
     function formatCurrencyShort($number) {
@@ -17,6 +65,8 @@
         if ($number >= 1000) return $prefix . number_format($number / 1000, 0) . 'K';
         return $prefix . number_format($number, 2);
     }
+    
+    $conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +87,6 @@
         <div class="content-header-row">
             <h1>Financial Analytics</h1>
         </div>
-        
         
         <!-- === 1. Filter Form === -->
         <form method="GET" action="analytics.php" class="search-form card">
@@ -133,4 +182,4 @@
 </div>
 
 </body>
-</html>
+</html> 

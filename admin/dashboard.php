@@ -1,44 +1,60 @@
 <?php
-    require_once(__DIR__ . '/auth_check.php'); 
+    require_once(__DIR__ . '/auth_check.php');
 
     function formatCountShort($number) {
         if ($number >= 1000000) {
-            return number_format($number / 1000000, 1) . 'M'; // e.g., 1.5M
+            return number_format($number / 1000000, 1) . 'M'; 
         }
         if ($number >= 1000) {
-            return number_format($number / 1000, 0) . 'K'; // e.g., 150K
+            return number_format($number / 1000, 1) . 'k'; 
         }
-        return number_format($number, 0); // e.g., 123
+        return number_format($number, 0); 
     }
 
     function formatCurrencyShort($number) {
         $prefix = $number < 0 ? '-$' : '$';
         $number = abs($number);
-
         if ($number >= 1000000) {
-            return $prefix . number_format($number / 1000000, 1) . 'M'; // e.g., $1.5M
+            return $prefix . number_format($number / 1000000, 1) . 'M'; 
         }
         if ($number >= 1000) {
-            return $prefix . number_format($number / 1000, 0) . 'K'; // e.g., $150K
+            return $prefix . number_format($number / 1000, 1) . 'k'; 
         }
-        return $prefix . number_format($number, 2); // e.g., $123.45
+        return $prefix . number_format($number, 2); 
     }
 
-    $arrivals_count = $data['arrivals_count'] ?? 0;
-    $departures_count = $data['departures_count'] ?? 0;
-    $checked_in_count = $data['checked_in_count'] ?? 0;
-    $rooms_cleaning = $data['rooms_cleaning'] ?? 0;
-    $revenue_mtd = $data['revenue_mtd'] ?? 0; 
-    $unpaid_total = $data['unpaid_total'] ?? 0;
-    $payments_collected_today = $data['payments_collected_today'] ?? 0; 
-    $refunds_issued_today = $data['refunds_issued_today'] ?? 0; 
-    $outstanding_count = $data['outstanding_count'] ?? 0;
-    $new_bookings_mtd = $data['new_bookings_mtd'] ?? 0;
-    $walkins_today = $data['walkins_today'] ?? 0;
-    $rooms_clean = $data['rooms_clean'] ?? 0;
-    $rooms_occupied = $data['rooms_occupied'] ?? 0;
-    $rooms_maintenance = $data['rooms_maintenance'] ?? 0;
+    // Call the Stored Procedure ---
+    $data = [];
+    try {
+        $sql = "CALL sp_GetDashboardAnalytics()";
+        $result = $conn->query($sql);
+        
+        if ($result === false) {
+            throw new Exception("Database query failed: " . $conn->error);
+        }
+        $data = $result->fetch_assoc();
+        $result->close();
+        
+        // Clear any 'more results' so we can run other queries if needed
+        while($conn->more_results()) {
+            $conn->next_result();
+            if($res = $conn->store_result()) {
+                $res->free();
+            }
+        }
+    } catch (Exception $e) {
+        die("<strong>Fatal Dashboard Error:</strong> " . $e->getMessage());
+    }
 
+    $arrivals_count         = $data['arrivals_count'] ?? 0;
+    $departures_count       = $data['departures_count'] ?? 0;
+    $checked_in_count       = $data['checked_in_count'] ?? 0;
+    $walkins_today          = $data['walkins_today'] ?? 0;
+    
+    $rooms_clean            = $data['rooms_clean'] ?? 0;
+    $rooms_occupied         = $data['rooms_occupied'] ?? 0;
+    $rooms_cleaning         = $data['rooms_cleaning'] ?? 0;
+    $rooms_maintenance      = $data['rooms_maintenance'] ?? 0;
     $conn->close();
 ?>
 <!DOCTYPE html>
