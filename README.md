@@ -22,26 +22,40 @@
 | **Frontend**    | HTML5, CSS3, JavaScript (AJAX)                         |
 | **Environment** | XAMPP, MAMP, WAMP                                      |
 
----
 
 ---
 
 ## 📸 **UI Preview**
 
-### **Index Page**
-<img width="1425" height="817" alt="image" src="https://github.com/user-attachments/assets/f7edbc4a-affe-43d8-a97e-6964b862898e" />
+<details>
+<summary><strong> Index Page</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/f7edbc4a-affe-43d8-a97e-6964b862898e" width="700"/>
+</details>
 
-### **Guest Dashboard**
-<img width="1440" height="772" alt="image" src="https://github.com/user-attachments/assets/5dd613e5-7e98-468d-b5bb-3213126f641d" />
+<details>
+<summary><strong> Guest Dashboard</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/5dd613e5-7e98-468d-b5bb-3213126f641d" width="700"/>
+</details>
 
-### **Admin Panel**
-<img width="1437" height="623" alt="image" src="https://github.com/user-attachments/assets/2ef9a76f-9e77-4f90-8b82-663d87304801" />
+<details>
+<summary><strong> Admin Panel</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/2ef9a76f-9e77-4f90-8b82-663d87304801" width="700"/>
+</details>
 
-### **Check-In**
-<img width="1440" height="687" alt="image" src="https://github.com/user-attachments/assets/17b3dc92-ccc8-4e8f-b62a-a1f4fc66ccd1" />
+<details>
+<summary><strong> Check-In</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/17b3dc92-ccc8-4e8f-b62a-a1f4fc66ccd1" width="700"/>
+</details>
 
-### **Admin Analytics**
-<img width="1438" height="815" alt="image" src="https://github.com/user-attachments/assets/9054a0ed-1752-4682-bf97-f4deb4ae79e5" />
+<details>
+<summary><strong> Admin Analytics</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/9054a0ed-1752-4682-bf97-f4deb4ae79e5" width="700"/>
+</details>
 
 ---
 
